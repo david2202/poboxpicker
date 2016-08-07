@@ -50,13 +50,17 @@
             $("#searchTerm").keypress(function(e) {
                 var key = e.which;
                 if (key == 13) {
-                    $.get("/rest/box?searchTerm=" + $("#searchTerm").val(), function(data) {
+                    $.get("<c:url value='/rest/box' />?searchTerm=" + $("#searchTerm").val(), function(data) {
                         alert("Got it " + $("#searchTerm").val());
                     });
                 }
             });
 
-            $("#boxes").bootgrid();
+            $("#boxes").bootgrid({
+                navigation: 0,
+                selection: true,
+                rowSelect: true
+            });
          });
     </script>
 </head>
