@@ -2,6 +2,12 @@ package au.com.auspost.poboxpicker.controller;
 
 import au.com.auspost.poboxpicker.LightResponse;
 import au.com.auspost.poboxpicker.service.BoxSearchService;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +32,8 @@ public class LightRESTController {
     public LightResponse box(@PathVariable Integer number) throws IOException {
         LOG.info("Lighting up light number {}", number);
 
-        /*
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(arduinoUrl + light);
+        HttpGet httpGet = new HttpGet(arduinoUrl + number);
         CloseableHttpResponse response1 = httpclient.execute(httpGet);
         try {
             System.out.println(response1.getStatusLine());
@@ -39,7 +44,6 @@ public class LightRESTController {
         } finally {
             response1.close();
         }
-        */
         LightResponse br = new LightResponse();
         br.setNumber(number);
         return br;
