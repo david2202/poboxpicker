@@ -24,12 +24,28 @@
         recognition.onresult = function(event) {
             searchTerm = event.results[0][0].transcript;
             $("#searchTerm").val(searchTerm);
+            search(searchTerm);
         }
 
         recognition.onend = function(event) {
             recognizing = false;
             $("#microphoneIcon").removeClass("fa-microphone-slash");
             $("#microphoneIcon").addClass("fa-microphone");
+        }
+
+        function search(searchTerm) {
+            $.get("<c:url value='/rest/box' />?searchTerm=" + $("#searchTerm").val(), function(boxes) {
+                $("#boxes").bootgrid("clear").bootgrid("append", boxes);
+                if (boxes.length == 1) {
+                    light(boxes[0].ledNumber);
+                }
+            });
+        }
+
+        function light(number) {
+            $.get("<c:url value='/rest/light/' />" + number, function(data) {
+                // Nothing to do
+            });
         }
 
         jQuery(document).ready(function ($) {
@@ -50,16 +66,16 @@
             $("#searchTerm").keypress(function(e) {
                 var key = e.which;
                 if (key == 13) {
-                    $.get("<c:url value='/rest/box' />?searchTerm=" + $("#searchTerm").val(), function(data) {
-                        alert("Got it " + $("#searchTerm").val());
-                    });
+                    search($("#searchTerm").val());
                 }
             });
 
             $("#boxes").bootgrid({
-                navigation: 0,
-                selection: true,
-                rowSelect: true
+                navigation: 0
+            });
+
+            $("#boxes").bootgrid().on("click.rs.jquery.bootgrid", function(e, columns, row) {
+                light(row.ledNumber);
             });
          });
     </script>
@@ -80,17 +96,12 @@
                 <table id="boxes" class="table table-condensed table-hover table-striped">
                     <thead>
                         <tr>
-                            <th>Box</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th data-column-id="number">Box</th>
+                            <th data-column-id="firstName">First Name</th>
+                            <th data-column-id="lastName">Last Name</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Box</td>
-                            <td>First Name</td>
-                            <td>Last Name</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

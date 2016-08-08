@@ -5,16 +5,23 @@ import com.googlecode.cqengine.ConcurrentIndexedCollection;
 import com.googlecode.cqengine.IndexedCollection;
 import com.googlecode.cqengine.index.navigable.NavigableIndex;
 import com.googlecode.cqengine.index.radix.RadixTreeIndex;
+import com.googlecode.cqengine.query.Query;
+import com.googlecode.cqengine.query.option.DeduplicationOption;
+import com.googlecode.cqengine.query.option.DeduplicationStrategy;
+import com.googlecode.cqengine.resultset.ResultSet;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
+
+import static com.googlecode.cqengine.query.QueryFactory.*;
 
 @Component
 public class BoxIndex implements InitializingBean {
+    private static final DeduplicationOption DEDUPE =
+            deduplicate(DeduplicationStrategy.LOGICAL_ELIMINATION);
+
     private IndexedCollection<Box> boxes = new ConcurrentIndexedCollection<>();
 
     @Override
@@ -26,19 +33,14 @@ public class BoxIndex implements InitializingBean {
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME));
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME_PHONETIC));
 
-        Box box;
-
-        box = new Box(1001, "david", "howe", Arrays.asList("dave", "davo"), 1);
-        boxes.add(box);
-
-        box = new Box(3005, "alex", "lewis", Arrays.asList("alexander"), 2);
-        boxes.add(box);
-
-        box = new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 3);
-        boxes.add(box);
+        boxes.add(new Box(1001, "david", "howe", Arrays.asList("dave", "davo"), 1));
+        boxes.add(new Box(3005, "alex", "lewis", Arrays.asList("alexander"), 2));
+        boxes.add(new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 3));
+        boxes.add(new Box(4024, "peter", "smith", Arrays.asList("pete"), 4));
+        boxes.add(new Box(4024, "jon", "smyth", Arrays.asList("jonathon"), 5));
     }
 
-    public IndexedCollection<Box> getIndex() {
-        return boxes;
+    public ResultSet<Box> query(Query<Box> query) {
+        return boxes.retrieve(query, queryOptions(DEDUPE));
     }
 }

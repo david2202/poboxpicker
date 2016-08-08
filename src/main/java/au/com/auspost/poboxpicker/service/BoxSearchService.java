@@ -45,9 +45,12 @@ public class BoxSearchService {
 
     private ResultSet<Box> singleSearchTerm(String name) {
         ResultSet<Box> result;
-        // Try an exact match on last name
-        Query<Box> query = equal(Box.LAST_NAME, name);
-        result = boxIndex.getIndex().retrieve(query);
+        // Try an exact or phonetic match on last name
+        Query<Box> query =  or(
+                                equal(Box.LAST_NAME, name),
+                                equal(Box.LAST_NAME_PHONETIC, phonetic(name))
+                            );
+        result = boxIndex.query(query);
 
         // Next try an exact match on first name or alternate names
         if (result.isEmpty()) {
@@ -55,13 +58,7 @@ public class BoxSearchService {
                         equal(Box.FIRST_NAME, name),
                         contains(Box.ALTERNAME_NAMES, name)
                     );
-            result = boxIndex.getIndex().retrieve(query);
-        }
-
-        // Next try a phonetic match on last name
-        if (result.isEmpty()) {
-            query = equal(Box.LAST_NAME_PHONETIC, phonetic(name));
-            result = boxIndex.getIndex().retrieve(query);
+            result = boxIndex.query(query);
         }
 
         // Next try a phonetic match on first name or alternate names
@@ -70,7 +67,7 @@ public class BoxSearchService {
                         equal(Box.FIRST_NAME_PHONETIC, phonetic(name)),
                         contains(Box.ALTERNAME_NAMES_PHONETIC, phonetic(name))
                     );
-            result = boxIndex.getIndex().retrieve(query);
+            result = boxIndex.query(query);
         }
         return result;
     }
@@ -86,7 +83,7 @@ public class BoxSearchService {
                                 equal(Box.LAST_NAME, lastName),
                                 in(Box.FIRST_NAME, firstNames)
                            );
-        result = boxIndex.getIndex().retrieve(query);
+        result = boxIndex.query(query);
 
         // Next try an exact match on last name and alternate names
         if (result.isEmpty()) {
@@ -94,7 +91,7 @@ public class BoxSearchService {
                     equal(Box.LAST_NAME, lastName),
                     in(Box.ALTERNAME_NAMES, firstNames)
             );
-            result = boxIndex.getIndex().retrieve(query);
+            result = boxIndex.query(query);
         }
 
         // Next try a phonetic match on last name and an exact or phonetic match on first name or alternate names
@@ -108,14 +105,14 @@ public class BoxSearchService {
                                 in(Box.ALTERNAME_NAMES_PHONETIC, firstNamesPhonetic)
                         )
                     );
-            result = boxIndex.getIndex().retrieve(query);
+            result = boxIndex.query(query);
         }
         return result;
     }
 
     private List<Box> searchBoxNumber(Integer number) {
         Query<Box> query = equal(Box.NUMBER, number);
-        ResultSet<Box> result = boxIndex.getIndex().retrieve(query);
+        ResultSet<Box> result = boxIndex.query(query);
 
         List<Box> boxes = buildBoxList(result);
         return boxes;
