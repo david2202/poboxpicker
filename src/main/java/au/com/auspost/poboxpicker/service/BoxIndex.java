@@ -33,11 +33,11 @@ public class BoxIndex implements InitializingBean {
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME));
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME_PHONETIC));
 
-        boxes.add(new Box(1001, "david", "howe", Arrays.asList("dave", "davo"), 1));
-        boxes.add(new Box(3005, "alex", "lewis", Arrays.asList("alexander"), 2));
-        boxes.add(new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 3));
-        boxes.add(new Box(4024, "peter", "smith", Arrays.asList("pete"), 4));
-        boxes.add(new Box(5198, "jon", "smyth", Arrays.asList("jonathon"), 5));
+        boxes.add(new Box(1001, "david", "howe", Arrays.asList("dave", "davo"), 0));
+        boxes.add(new Box(3005, "alex", "lewis", Arrays.asList("alexander"), 1));
+        boxes.add(new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 2));
+        boxes.add(new Box(4024, "peter", "smith", Arrays.asList("pete"), 3));
+        boxes.add(new Box(5198, "jon", "smyth", Arrays.asList("jonathon"), 4));
     }
 
     public ResultSet<Box> query(Query<Box> query) {

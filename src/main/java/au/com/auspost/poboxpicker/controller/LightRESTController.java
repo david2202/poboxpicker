@@ -22,6 +22,9 @@ import java.io.IOException;
 public class LightRESTController {
     private static final Logger LOG = LoggerFactory.getLogger(LightRESTController.class);
 
+    @Value("${au.com.auspost.poboxpicker.arduinoEnabled}")
+    private Boolean arduinoEnabled;
+
     @Value("${au.com.auspost.poboxpicker.arduinoUrl}")
     private String arduinoUrl;
 
@@ -30,19 +33,22 @@ public class LightRESTController {
 
     @RequestMapping("/rest/light/{number}")
     public LightResponse box(@PathVariable Integer number) throws IOException {
-        LOG.info("Lighting up light number {}", number);
-
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(arduinoUrl + number);
-        CloseableHttpResponse response1 = httpclient.execute(httpGet);
-        try {
-            System.out.println(response1.getStatusLine());
-            HttpEntity entity1 = response1.getEntity();
-            // do something useful with the response body
-            // and ensure it is fully consumed
-            EntityUtils.consume(entity1);
-        } finally {
-            response1.close();
+        if (arduinoEnabled) {
+            LOG.info("Lighting up light number {}", number);
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(arduinoUrl + number);
+            CloseableHttpResponse response1 = httpclient.execute(httpGet);
+            try {
+                System.out.println(response1.getStatusLine());
+                HttpEntity entity1 = response1.getEntity();
+                // do something useful with the response body
+                // and ensure it is fully consumed
+                EntityUtils.consume(entity1);
+            } finally {
+                response1.close();
+            }
+        } else {
+            LOG.info("Arduino disabled for light number {}", number);
         }
         LightResponse br = new LightResponse();
         br.setNumber(number);
