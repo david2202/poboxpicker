@@ -8,6 +8,7 @@ import org.apache.commons.codec.language.DoubleMetaphone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Box {
     private static final DoubleMetaphone doubleMetaphone = new DoubleMetaphone();
@@ -22,7 +23,7 @@ public class Box {
     public static final Attribute<Box, String> FIRST_NAME = new SimpleAttribute<Box, String>() {
         @Override
         public String getValue(Box box, QueryOptions queryOptions) {
-            return box.getFirstName();
+            return box.getFirstName().toLowerCase();
         }
     };
 
@@ -36,7 +37,9 @@ public class Box {
     public static final Attribute<Box, String> ALTERNAME_NAMES = new MultiValueAttribute<Box, String>() {
         @Override
         public Iterable<String> getValues(Box box, QueryOptions queryOptions) {
-            return box.getAlternateNames();
+            return box.getAlternateNames().stream()
+                    .map(String::toLowerCase)
+                    .collect(Collectors.toList());
         }
     };
 
@@ -54,7 +57,7 @@ public class Box {
     public static final Attribute<Box, String> LAST_NAME = new SimpleAttribute<Box, String>() {
         @Override
         public String getValue(Box box, QueryOptions queryOptions) {
-            return box.getLastName();
+            return box.getLastName().toLowerCase();
         }
     };
 

@@ -33,13 +33,14 @@ public class BoxIndex implements InitializingBean {
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME));
         boxes.addIndex(RadixTreeIndex.onAttribute(Box.LAST_NAME_PHONETIC));
 
-        boxes.add(new Box(1001, "david", "howe", Arrays.asList("dave", "davo"), 0));
-        boxes.add(new Box(3005, "alex", "lewis", Arrays.asList("alexander"), 1));
-        boxes.add(new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 2));
-        boxes.add(new Box(4024, "peter", "smith", Arrays.asList("pete"), 3));
-        boxes.add(new Box(5198, "jon", "smyth", Arrays.asList("jonathon"), 4));
-        boxes.add(new Box(8000, "george", "aligianis", Collections.EMPTY_LIST, 5));
-        boxes.add(new Box(8000, "andrew", "richmond", Arrays.asList("drew", "andy"), 6));
+        boxes.add(new Box(1001, "David", "Howe", Arrays.asList("Dave", "Davo"), 0));
+        boxes.add(new Box(3005, "Alex", "Lewis", Arrays.asList("Alexander"), 1));
+        boxes.add(new Box(3080, "Aman", "Sahani", Collections.EMPTY_LIST, 2));
+        boxes.add(new Box(4024, "Peter", "Smith", Arrays.asList("Pete"), 3));
+        boxes.add(new Box(5198, "Jon", "Smyth", Arrays.asList("Jonathon"), 4));
+        boxes.add(new Box(8000, "George", "Aligianis", Collections.EMPTY_LIST, 5));
+        boxes.add(new Box(8000, "Andrew", "Richmond", Arrays.asList("Drew", "Andy"), 6));
+        boxes.add(new Box(8000, "Mark", "Philippoussis", Collections.EMPTY_LIST, 7));
     }
 
     public ResultSet<Box> query(Query<Box> query) {
