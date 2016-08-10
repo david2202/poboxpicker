@@ -19,10 +19,12 @@
         var recognition = new webkitSpeechRecognition();
         var recognizing = false;
 
-        // recognition.continuous = false;
+        recognition.continuous = true;
         // recognition.interimResults = false;
         recognition.lang = "en-AU";
         recognition.onresult = function(event) {
+            recognition.stop();
+            recognizing = false;
             searchTerm = event.results[0][0].transcript;
             $("#searchTerm").val(searchTerm);
             search(searchTerm);
@@ -62,6 +64,7 @@
                     recognition.start();
                     recognizing = true;
                 }
+                event.preventDefault();
             });
 
             $("#searchTerm").keypress(function(e) {
