@@ -38,6 +38,8 @@ public class BoxIndex implements InitializingBean {
         boxes.add(new Box(3080, "aman", "sahani", Collections.EMPTY_LIST, 2));
         boxes.add(new Box(4024, "peter", "smith", Arrays.asList("pete"), 3));
         boxes.add(new Box(5198, "jon", "smyth", Arrays.asList("jonathon"), 4));
+        boxes.add(new Box(8000, "george", "aligianis", Collections.EMPTY_LIST, 5));
+        boxes.add(new Box(8000, "andrew", "richmond", Arrays.asList("drew", "andy"), 6));
     }
 
     public ResultSet<Box> query(Query<Box> query) {
